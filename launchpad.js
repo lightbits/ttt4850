@@ -70,7 +70,11 @@ function main()
     LoadSample(SAMPLE6, "assets/B/flash-2.mp3");
     LoadSample(SAMPLE7, "assets/B/flash-3.mp3");
 
-    var BUTTONS = [];
+    var BUTTONS = [128];
+    for (var index = 0; index < 128; index++)
+    {
+        BUTTONS.push({sample: null, is_set: false});
+    }
     for (var x = 0; x < 8; x++)
     {
         BUTTONS[XYToMidiIndex(x, 0)] = {sample: SAMPLE0, is_set: false};
@@ -102,9 +106,12 @@ function main()
         console.log(event);
         var button_index = event.data[1];
         var down = event.data[2] == 0;
+        var x = MidiIndexToXY(button_index)[0];
+        var y = MidiIndexToXY(button_index)[1];
 
-        if (down)
+        if (down && x >= 0 && x <= 7 && y >= 0 && y <= 7)
         {
+            console.log("Setting array button");
             if (BUTTONS[button_index].is_set)
             {
                 BUTTONS[button_index].is_set = false;
@@ -117,8 +124,9 @@ function main()
             }
         }
 
-        if (down && button == 108)
+        if (down && button_index == 108)
         {
+            console.log("Resetting all buttons");
             for (var index = 0; index < 128; index++)
             {
                 BUTTONS[index].is_set = false;
