@@ -224,9 +224,13 @@ function main()
         STATUS.innerHTML = "Failed to get MIDI access - " + msg;
     }
 
-    function MusicLoop(interval) 
+    function StartMusicLoop(interval) 
     {
-        window.setInterval(PlayColumn(), interval);
+        return window.setInterval(PlayColumn, interval);
+    }
+
+    function StopMusicLoop(loop) {
+        window.clearInterval(loop);
     }
 
     function PlayColumn() 
