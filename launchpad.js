@@ -10,6 +10,7 @@ function main()
     var INPUT = null;
     var OUTPUT = null;
     var COLOR = 32;
+    var COLUMN = 0;
 
     var SAMPLE0 = {buffer: null};
     var SAMPLE1 = {buffer: null};
@@ -186,5 +187,17 @@ function main()
         STATUS.innerHTML = "Failed to get MIDI access - " + msg;
     }
 
+    function MusicLoop(interval) 
+    {
+        window.setInterval(PlayColumn(), interval);
+    }
+
+    function PlayColumn() 
+    {
+        samples = getSampleColumn(COLUMN);
+        for (var i = 0; i < samples.length; i++) {
+            PlaySample(column[i],gain,rate);
+        }
+    }
     navigator.requestMIDIAccess({sysex: true}).then(OnMidiSuccess, OnMidiFailure);
 }
