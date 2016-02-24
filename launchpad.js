@@ -77,7 +77,7 @@ function main()
             else if (button == 84)
                 PlaySample(CONTEXT, SAMPLE7, 1.0, 1.0);
             console.log("Setting color " + COLOR);
-            NoteOn(button, COLOR);
+            NoteColor(button, COLOR);
         }
     }
 
