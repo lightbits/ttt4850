@@ -99,21 +99,21 @@ function main()
         else if (down)
         {
             if (button == 71)
-                PlaySample(CONTEXT, SAMPLE0, 1.0, 1.0);
+                PlaySample(SAMPLE0, 1.0, 1.0);
             else if (button == 72)
-                PlaySample(CONTEXT, SAMPLE1, 1.0, 1.0);
+                PlaySample(SAMPLE1, 1.0, 1.0);
             else if (button == 73)
-                PlaySample(CONTEXT, SAMPLE2, 1.0, 1.0);
+                PlaySample(SAMPLE2, 1.0, 1.0);
             else if (button == 74)
-                PlaySample(CONTEXT, SAMPLE3, 1.0, 1.0);
+                PlaySample(SAMPLE3, 1.0, 1.0);
             else if (button == 81)
-                PlaySample(CONTEXT, SAMPLE4, 1.0, 1.0);
+                PlaySample(SAMPLE4, 1.0, 1.0);
             else if (button == 82)
-                PlaySample(CONTEXT, SAMPLE5, 1.0, 1.0);
+                PlaySample(SAMPLE5, 1.0, 1.0);
             else if (button == 83)
-                PlaySample(CONTEXT, SAMPLE6, 1.0, 1.0);
+                PlaySample(SAMPLE6, 1.0, 1.0);
             else if (button == 84)
-                PlaySample(CONTEXT, SAMPLE7, 1.0, 1.0);
+                PlaySample(SAMPLE7, 1.0, 1.0);
             console.log("Setting color " + COLOR);
             NoteColor(button, COLOR);
         }
