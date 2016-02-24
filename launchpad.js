@@ -265,17 +265,25 @@ function main()
         STATUS.innerHTML = "Failed to get MIDI access - " + msg;
     }
 
+<<<<<<< HEAD
     function MusicLoop(interval)
+=======
+    function StartMusicLoop(interval) 
+>>>>>>> 847ace295f10a9f53f6f432842c57aaa000dbe44
     {
-        window.setInterval(PlayColumn(), interval);
+        return window.setInterval(PlayColumn, interval);
+    }
+
+    function StopMusicLoop(loop) {
+        window.clearInterval(loop);
     }
 
     function PlayColumn()
     {
-        samples = getSampleColumn(COLUMN);
         for (var i = 0; i < samples.length; i++) {
-            PlaySample(column[i],gain,rate);
+            PlayButton(COLUMN, i);
         }
+        COLUMN+=1;
     }
     navigator.requestMIDIAccess({sysex: true}).then(OnMidiSuccess, OnMidiFailure);
 }
