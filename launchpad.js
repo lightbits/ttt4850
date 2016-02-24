@@ -235,8 +235,8 @@ function main()
 
     function PlayColumn() 
     {
-        for (var i = 0; i < samples.length; i++) {
-            PlayButton(COLUMN, i);
+        for (var i = 0; i < 8; i++) {
+            PlayButton(COLUMN%8, i);
         }
         COLUMN+=1;
     }
