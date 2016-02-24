@@ -103,6 +103,11 @@ function main()
         }
     }
 
+    function IsButtonOn(x, y)
+    {
+        return BUTTONS[XYToMidiIndex(x, y)].is_set;
+    }
+
     function OnMidiMessage(event)
     {
         // console.log(event);
@@ -119,12 +124,10 @@ function main()
             if (BUTTONS[button_index].is_set)
             {
                 BUTTONS[button_index].is_set = false;
-                NoteColor(button_index, 0);
             }
             else
             {
                 BUTTONS[button_index].is_set = true;
-                NoteColor(button_index, 35);
             }
         }
 
@@ -134,9 +137,21 @@ function main()
             for (var index = 0; index < 128; index++)
             {
                 BUTTONS[index].is_set = false;
-                NoteColor(index, 0);
+                ZeroAllLightsFast();
             }
         }
+    }
+
+    function ZeroAllLightsFast()
+    {
+        // Reset-all
+        OUTPUT.send([240, 0, 32, 41, 2,  24, 14, 0, 247]);
+    }
+
+    function WriteHelloWorld()
+    {
+        // Syntax: 240, 0, 32, 41, 2,  24, 20, <Colour> <Loop> <Text> 247
+        OUTPUT.send([240, 0, 32, 41, 2, 4, 20, 124, 1, 5, 72, 101, 108, 108, 111, 32, 2, 119, 111, 114, 108, 100, 33, 247]);
     }
 
     function SendNoteMessage(data)
