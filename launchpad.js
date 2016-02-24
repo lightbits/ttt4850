@@ -87,6 +87,8 @@ function main()
         BUTTONS[XYToMidiIndex(x, 7)] = {sample: SAMPLE7, is_set: false};
     }
 
+    var loop = StartMusicLoop(500);
+
     function PlayButton(x, y)
     {
         if (x >= 0 && x <= 7 && y >= 0 && y <= 7)
@@ -251,6 +253,7 @@ function main()
 
     function PlayColumn()
     {
+        console.log(COLUMN);
         for (var i = 0; i < 8; i++) {
             PlayButton(COLUMN%8, i);
         }
