@@ -36,7 +36,7 @@ function XYToMidiIndex(x, y)
 function MidiIndexToXY(index)
 {
     x = (index-11)%10;
-    y = (index-11)/10;
+    y = Math.floor((index-11)/10);
     return [x, y];
 }
 
@@ -105,11 +105,13 @@ function main()
 
     function OnMidiMessage(event)
     {
-        console.log(event);
+        // console.log(event);
         var button_index = event.data[1];
         var down = event.data[2] == 0;
         var x = MidiIndexToXY(button_index)[0];
         var y = MidiIndexToXY(button_index)[1];
+
+        console.log("Input: " + button_index + "(" + x + ", " + y + ")");
 
         if (down && x >= 0 && x <= 7 && y >= 0 && y <= 7)
         {
@@ -144,7 +146,7 @@ function main()
                     (data[2] >= 0 && data[2] <= 127);
         if (OUTPUT && valid)
         {
-            console.log("Sending " + data);
+            // console.log("Sending " + data);
             OUTPUT.send(data);
         }
     }
@@ -253,7 +255,6 @@ function main()
 
     function PlayColumn()
     {
-        console.log(COLUMN);
         for (var i = 0; i < 8; i++) {
             PlayButton(COLUMN%8, i);
         }
