@@ -117,47 +117,14 @@ function main()
             }
         }
 
-        // Simple example functionality:
-        // SESSION button turns off all lights
-        // UP arrow increases next color value
-        // DOWN arrow decreases next color value
-        // Pushing a button sets its light and plays a sound
-        // if (down && button == 104)
-        // {
-        //     if (COLOR < 128) COLOR++;
-        // }
-        // else if (down && button == 105)
-        // {
-        //     if (COLOR > 0) COLOR--;
-        // }
-        // else if (down && button == 108)
-        // {
-        //     for (var button = 0; button < 128; button++)
-        //     {
-        //         NoteColor(button, 0);
-        //     }
-        // }
-        // else if (down)
-        // {
-        //     if (button == 71)
-        //         PlaySample(SAMPLE0, 1.0, 1.0);
-        //     else if (button == 72)
-        //         PlaySample(SAMPLE1, 1.0, 1.0);
-        //     else if (button == 73)
-        //         PlaySample(SAMPLE2, 1.0, 1.0);
-        //     else if (button == 74)
-        //         PlaySample(SAMPLE3, 1.0, 1.0);
-        //     else if (button == 81)
-        //         PlaySample(SAMPLE4, 1.0, 1.0);
-        //     else if (button == 82)
-        //         PlaySample(SAMPLE5, 1.0, 1.0);
-        //     else if (button == 83)
-        //         PlaySample(SAMPLE6, 1.0, 1.0);
-        //     else if (button == 84)
-        //         PlaySample(SAMPLE7, 1.0, 1.0);
-        //     console.log("Setting color " + COLOR);
-        //     NoteColor(button, COLOR);
-        // }
+        if (down && button == 108)
+        {
+            for (var index = 0; index < 128; index++)
+            {
+                BUTTONS[index].is_set = false;
+                NoteColor(index, 0);
+            }
+        }
     }
 
     function SendNoteMessage(data)
@@ -265,11 +232,7 @@ function main()
         STATUS.innerHTML = "Failed to get MIDI access - " + msg;
     }
 
-<<<<<<< HEAD
-    function MusicLoop(interval)
-=======
-    function StartMusicLoop(interval) 
->>>>>>> 847ace295f10a9f53f6f432842c57aaa000dbe44
+    function StartMusicLoop(interval)
     {
         return window.setInterval(PlayColumn, interval);
     }
