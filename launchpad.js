@@ -235,10 +235,10 @@ function main()
 
     function PlayColumn() 
     {
-        samples = getSampleColumn(COLUMN);
         for (var i = 0; i < samples.length; i++) {
-            PlaySample(column[i],gain,rate);
+            PlayButton(COLUMN, i);
         }
+        COLUMN+=1;
     }
     navigator.requestMIDIAccess({sysex: true}).then(OnMidiSuccess, OnMidiFailure);
 }
