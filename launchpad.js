@@ -124,7 +124,7 @@ function main()
             else
             {
                 BUTTONS[button_index].is_set = true;
-                NoteColor(button_index, 35);
+                NoteColor(button_index, 119);
             }
         }
 
@@ -134,7 +134,7 @@ function main()
             for (var index = 0; index < 128; index++)
             {
                 BUTTONS[index].is_set = false;
-                NoteColor(index, 0);
+                //NoteColor(index, 0);
             }
         }
     }
@@ -254,9 +254,26 @@ function main()
     }
 
     function PlayColumn()
-    {
+    {   
+        for (var x = 0; x < 8; x++) {
+            for (var y = 0; y < 8; y++) {
+                if (COLUMN-1 >= 0) {
+                    if (BUTTONS[XYToMidiIndex(x, y)].is_set) {
+                        NoteColor(XYToMidiIndex(x, y),9);
+                    } else {
+                        NoteColor(XYToMidiIndex(x, y),0);
+                    }  
+                }
+            } 
+        } 
+        
         for (var i = 0; i < 8; i++) {
             PlayButton(COLUMN%8, i);
+            if (BUTTONS[XYToMidiIndex(COLUMN%8, i)].is_set) {
+                NoteColor(XYToMidiIndex(COLUMN%8, i),120);
+            } else {
+                NoteStrobe(XYToMidiIndex(COLUMN%8, i),35);
+            }
         }
         COLUMN+=1;
     }
