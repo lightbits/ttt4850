@@ -83,6 +83,8 @@ function main()
         BUTTONS[XYToMidiIndex(x, 7)] = {sample: SAMPLE7, is_set: false};
     }
 
+    var loop = StartMusicLoop(500);
+
     function PlayButton(x, y)
     {
         if (x >= 0 && x <= 7 && y >= 0 && y <= 7)
@@ -265,11 +267,8 @@ function main()
         STATUS.innerHTML = "Failed to get MIDI access - " + msg;
     }
 
-<<<<<<< HEAD
-    function MusicLoop(interval)
-=======
+
     function StartMusicLoop(interval) 
->>>>>>> 847ace295f10a9f53f6f432842c57aaa000dbe44
     {
         return window.setInterval(PlayColumn, interval);
     }
@@ -280,6 +279,7 @@ function main()
 
     function PlayColumn()
     {
+        console.log(COLUMN);
         for (var i = 0; i < 8; i++) {
             PlayButton(COLUMN%8, i);
         }
