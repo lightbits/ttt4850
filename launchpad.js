@@ -4,6 +4,7 @@
 // Approach 2: Sound does not change across columns. Have some melody samples.
 // Ide: Lyder dør ut etterhvert -> tvinger deg til å lage ny lyd
 // Ide: Midlertidige lyder, to moduser, holde inne versus trykke
+// Ide: Alle lyder dør ut etterhvert
 
 // The Launchpad button layout
 // is represented as a 2D array
@@ -63,39 +64,39 @@ function main()
     var AudioContext = AudioContext || webkitAudioContext; // for ios/safari
     var CONTEXT = new AudioContext();
 
-    // LoadSample(SAMPLE0, "assets/A/bubbles.mp3");
-    // LoadSample(SAMPLE1, "assets/A/clay.mp3");
-    // LoadSample(SAMPLE2, "assets/A/confetti.mp3");
-    // LoadSample(SAMPLE3, "assets/A/corona.mp3");
-    // LoadSample(SAMPLE4, "assets/A/dotted-spiral.mp3");
-    // LoadSample(SAMPLE5, "assets/A/flash-1.mp3");
-    // LoadSample(SAMPLE6, "assets/A/flash-2.mp3");
-    // LoadSample(SAMPLE7, "assets/A/flash-3.mp3");
+    LoadSample(SAMPLE0, "assets/A/bubbles.mp3");
+    LoadSample(SAMPLE1, "assets/A/clay.mp3");
+    LoadSample(SAMPLE2, "assets/A/confetti.mp3");
+    LoadSample(SAMPLE3, "assets/A/corona.mp3");
+    LoadSample(SAMPLE4, "assets/A/dotted-spiral.mp3");
+    LoadSample(SAMPLE5, "assets/A/flash-1.mp3");
+    LoadSample(SAMPLE6, "assets/A/flash-2.mp3");
+    LoadSample(SAMPLE7, "assets/A/flash-3.mp3");
 
-    LoadSample(SAMPLE0, "assets/M1/sound1.wav");
-    LoadSample(SAMPLE1, "assets/M1/sound2.wav");
-    LoadSample(SAMPLE2, "assets/M1/sound3.wav");
-    LoadSample(SAMPLE3, "assets/M1/sound4.wav");
-    LoadSample(SAMPLE4, "assets/M1/sound5.wav");
-    LoadSample(SAMPLE5, "assets/M1/sound6.wav");
-    LoadSample(SAMPLE6, "assets/M1/sound7.wav");
-    LoadSample(SAMPLE7, "assets/M1/sound8.wav");
+    // LoadSample(SAMPLE0, "assets/M1/sound1.wav");
+    // LoadSample(SAMPLE1, "assets/M1/sound2.wav");
+    // LoadSample(SAMPLE2, "assets/M1/sound3.wav");
+    // LoadSample(SAMPLE3, "assets/M1/sound4.wav");
+    // LoadSample(SAMPLE4, "assets/M1/sound5.wav");
+    // LoadSample(SAMPLE5, "assets/M1/sound6.wav");
+    // LoadSample(SAMPLE6, "assets/M1/sound7.wav");
+    // LoadSample(SAMPLE7, "assets/M1/sound8.wav");
 
     var BUTTONS = [128];
     for (var index = 0; index < 128; index++)
     {
-        BUTTONS.push({sample: null, is_set: false, is_down: false});
+        BUTTONS.push({sample: null, is_set: false, is_down: false, times_played: 0});
     }
     for (var x = 0; x < 8; x++)
     {
-        BUTTONS[XYToMidiIndex(x, 0)] = {sample: SAMPLE0, is_set: false, is_down: false};
-        BUTTONS[XYToMidiIndex(x, 1)] = {sample: SAMPLE1, is_set: false, is_down: false};
-        BUTTONS[XYToMidiIndex(x, 2)] = {sample: SAMPLE2, is_set: false, is_down: false};
-        BUTTONS[XYToMidiIndex(x, 3)] = {sample: SAMPLE3, is_set: false, is_down: false};
-        BUTTONS[XYToMidiIndex(x, 4)] = {sample: SAMPLE4, is_set: false, is_down: false};
-        BUTTONS[XYToMidiIndex(x, 5)] = {sample: SAMPLE5, is_set: false, is_down: false};
-        BUTTONS[XYToMidiIndex(x, 6)] = {sample: SAMPLE6, is_set: false, is_down: false};
-        BUTTONS[XYToMidiIndex(x, 7)] = {sample: SAMPLE7, is_set: false, is_down: false};
+        BUTTONS[XYToMidiIndex(x, 0)] = {sample: SAMPLE0, is_set: false, is_down: false, times_played: 0};
+        BUTTONS[XYToMidiIndex(x, 1)] = {sample: SAMPLE1, is_set: false, is_down: false, times_played: 0};
+        BUTTONS[XYToMidiIndex(x, 2)] = {sample: SAMPLE2, is_set: false, is_down: false, times_played: 0};
+        BUTTONS[XYToMidiIndex(x, 3)] = {sample: SAMPLE3, is_set: false, is_down: false, times_played: 0};
+        BUTTONS[XYToMidiIndex(x, 4)] = {sample: SAMPLE4, is_set: false, is_down: false, times_played: 0};
+        BUTTONS[XYToMidiIndex(x, 5)] = {sample: SAMPLE5, is_set: false, is_down: false, times_played: 0};
+        BUTTONS[XYToMidiIndex(x, 6)] = {sample: SAMPLE6, is_set: false, is_down: false, times_played: 0};
+        BUTTONS[XYToMidiIndex(x, 7)] = {sample: SAMPLE7, is_set: false, is_down: false, times_played: 0};
     }
 
     var SPEED_INDEX = 2;
@@ -108,7 +109,11 @@ function main()
         {
             button = BUTTONS[XYToMidiIndex(x, y)];
             if (button.is_set)
+            {
                 PlaySample(button.sample, 1.0, 1.0);
+                button.times_played++;
+                console.log(button.times_played);
+            }
         }
         else
         {
@@ -201,12 +206,12 @@ function main()
 
     function SendNoteMessage(data)
     {
-        var valid = (data[0] == 0x90 || data[0] == 0x91 || data[0] == 0x92) &&
+        var valid = (data[0] == 0x90 || data[0] == 0x91 || data[0] == 0x92 || data[0] == 0xB0) &&
                     (data[1] >= 0 && data[1] <= 127) &&
                     (data[2] >= 0 && data[2] <= 127);
         if (OUTPUT && valid)
         {
-            // console.log("Sending " + data);
+            console.log("Sending " + data);
             OUTPUT.send(data);
         }
     }
@@ -341,6 +346,19 @@ function main()
             PlayButton(COLUMN%8, i);
         }
         COLUMN+=1;
+
+        // Turn off buttons that have been played for more than N rounds
+        for (var index = 0; index < 128; index++)
+        {
+            if (BUTTONS[index].times_played == 2)
+            {
+                BUTTONS[index].times_played = 0;
+                BUTTONS[index].is_set = false;
+            }
+        }
+
+        // Light up session button
+        // SendNoteMessage([0xB0, 108, 35]);
     }
     navigator.requestMIDIAccess({sysex: true}).then(OnMidiSuccess, OnMidiFailure);
 }
