@@ -2,6 +2,8 @@
 
 // Approach 1: Alternate columns with "raw" sample and "melody" samples.
 // Approach 2: Sound does not change across columns. Have some melody samples.
+// Ide: Lyder dør ut etterhvert -> tvinger deg til å lage ny lyd
+// Ide: Midlertidige lyder, to moduser, holde inne versus trykke
 
 // The Launchpad button layout
 // is represented as a 2D array
@@ -61,33 +63,44 @@ function main()
     var AudioContext = AudioContext || webkitAudioContext; // for ios/safari
     var CONTEXT = new AudioContext();
 
-    LoadSample(SAMPLE0, "assets/B/bubbles.mp3");
-    LoadSample(SAMPLE1, "assets/B/clay.mp3");
-    LoadSample(SAMPLE2, "assets/B/confetti.mp3");
-    LoadSample(SAMPLE3, "assets/B/corona.mp3");
-    LoadSample(SAMPLE4, "assets/B/dotted-spiral.mp3");
-    LoadSample(SAMPLE5, "assets/B/flash-1.mp3");
-    LoadSample(SAMPLE6, "assets/B/flash-2.mp3");
-    LoadSample(SAMPLE7, "assets/B/flash-3.mp3");
+    // LoadSample(SAMPLE0, "assets/A/bubbles.mp3");
+    // LoadSample(SAMPLE1, "assets/A/clay.mp3");
+    // LoadSample(SAMPLE2, "assets/A/confetti.mp3");
+    // LoadSample(SAMPLE3, "assets/A/corona.mp3");
+    // LoadSample(SAMPLE4, "assets/A/dotted-spiral.mp3");
+    // LoadSample(SAMPLE5, "assets/A/flash-1.mp3");
+    // LoadSample(SAMPLE6, "assets/A/flash-2.mp3");
+    // LoadSample(SAMPLE7, "assets/A/flash-3.mp3");
+
+    LoadSample(SAMPLE0, "assets/M1/sound1.wav");
+    LoadSample(SAMPLE1, "assets/M1/sound2.wav");
+    LoadSample(SAMPLE2, "assets/M1/sound3.wav");
+    LoadSample(SAMPLE3, "assets/M1/sound4.wav");
+    LoadSample(SAMPLE4, "assets/M1/sound5.wav");
+    LoadSample(SAMPLE5, "assets/M1/sound6.wav");
+    LoadSample(SAMPLE6, "assets/M1/sound7.wav");
+    LoadSample(SAMPLE7, "assets/M1/sound8.wav");
 
     var BUTTONS = [128];
     for (var index = 0; index < 128; index++)
     {
-        BUTTONS.push({sample: null, is_set: false});
+        BUTTONS.push({sample: null, is_set: false, is_down: false});
     }
     for (var x = 0; x < 8; x++)
     {
-        BUTTONS[XYToMidiIndex(x, 0)] = {sample: SAMPLE0, is_set: false};
-        BUTTONS[XYToMidiIndex(x, 1)] = {sample: SAMPLE1, is_set: false};
-        BUTTONS[XYToMidiIndex(x, 2)] = {sample: SAMPLE2, is_set: false};
-        BUTTONS[XYToMidiIndex(x, 3)] = {sample: SAMPLE3, is_set: false};
-        BUTTONS[XYToMidiIndex(x, 4)] = {sample: SAMPLE4, is_set: false};
-        BUTTONS[XYToMidiIndex(x, 5)] = {sample: SAMPLE5, is_set: false};
-        BUTTONS[XYToMidiIndex(x, 6)] = {sample: SAMPLE6, is_set: false};
-        BUTTONS[XYToMidiIndex(x, 7)] = {sample: SAMPLE7, is_set: false};
+        BUTTONS[XYToMidiIndex(x, 0)] = {sample: SAMPLE0, is_set: false, is_down: false};
+        BUTTONS[XYToMidiIndex(x, 1)] = {sample: SAMPLE1, is_set: false, is_down: false};
+        BUTTONS[XYToMidiIndex(x, 2)] = {sample: SAMPLE2, is_set: false, is_down: false};
+        BUTTONS[XYToMidiIndex(x, 3)] = {sample: SAMPLE3, is_set: false, is_down: false};
+        BUTTONS[XYToMidiIndex(x, 4)] = {sample: SAMPLE4, is_set: false, is_down: false};
+        BUTTONS[XYToMidiIndex(x, 5)] = {sample: SAMPLE5, is_set: false, is_down: false};
+        BUTTONS[XYToMidiIndex(x, 6)] = {sample: SAMPLE6, is_set: false, is_down: false};
+        BUTTONS[XYToMidiIndex(x, 7)] = {sample: SAMPLE7, is_set: false, is_down: false};
     }
 
-    var loop = StartMusicLoop(500);
+    var SPEED_INDEX = 2;
+    var SPEEDS = [ 200, 250, 300, 350, 400, 450, 500 ];
+    var LOOP = StartMusicLoop(SPEEDS[SPEED_INDEX]);
 
     function PlayButton(x, y)
     {
@@ -112,27 +125,58 @@ function main()
     {
         // console.log(event);
         var button_index = event.data[1];
-        var down = event.data[2] == 0;
+        var released = event.data[2] == 0;
+        var down = event.data[2] == 127;
         var x = MidiIndexToXY(button_index)[0];
         var y = MidiIndexToXY(button_index)[1];
 
         console.log("Input: " + button_index + "(" + x + ", " + y + ")");
 
-        if (down && x >= 0 && x <= 7 && y >= 0 && y <= 7)
+        if (x >= 0 && x <= 7 && y >= 0 && y <= 7)
         {
-            console.log("Setting array button");
-            if (BUTTONS[button_index].is_set)
+            if (released)
             {
-                BUTTONS[button_index].is_set = false;
+                console.log("Setting array button");
+                if (BUTTONS[button_index].is_set)
+                {
+                    BUTTONS[button_index].is_set = false;
+                    NoteColor(button_index, 0);
+                }
+                else
+                {
+                    BUTTONS[button_index].is_set = true;
+                    NoteColor(button_index, 9);
+                }
+                BUTTONS[button_index].is_down = false;
             }
-            else
+            if (down)
             {
-                BUTTONS[button_index].is_set = true;
+                BUTTONS[button_index].is_down = true;
                 NoteColor(button_index, 119);
             }
         }
 
-        if (down && button_index == 108)
+        if (released && button_index == 105)
+        {
+            if (SPEED_INDEX < SPEEDS.length-1)
+            {
+                SPEED_INDEX++;
+                window.clearInterval(LOOP);
+                LOOP = StartMusicLoop(SPEEDS[SPEED_INDEX]);
+            }
+        }
+
+        if (released && button_index == 104)
+        {
+            if (SPEED_INDEX > 0)
+            {
+                SPEED_INDEX--;
+                window.clearInterval(LOOP);
+                LOOP = StartMusicLoop(SPEEDS[SPEED_INDEX]);
+            }
+        }
+
+        if (released && button_index == 108)
         {
             console.log("Resetting all buttons");
             for (var index = 0; index < 128; index++)
@@ -269,27 +313,32 @@ function main()
         window.clearInterval(loop);
     }
 
-    function PlayColumn()
+    function DrawState()
     {
         for (var x = 0; x < 8; x++) {
             for (var y = 0; y < 8; y++) {
-                if (COLUMN-1 >= 0) {
-                    if (BUTTONS[XYToMidiIndex(x, y)].is_set) {
-                        NoteColor(XYToMidiIndex(x, y),9);
-                    } else {
-                        NoteColor(XYToMidiIndex(x, y),0);
-                    }
+                if (BUTTONS[XYToMidiIndex(x, y)].is_set) {
+                    NoteColor(XYToMidiIndex(x, y),9);
+                } else if (!BUTTONS[XYToMidiIndex(x, y)].is_down) {
+                    NoteColor(XYToMidiIndex(x, y),0);
                 }
             }
         }
 
         for (var i = 0; i < 8; i++) {
-            PlayButton(COLUMN%8, i);
             if (BUTTONS[XYToMidiIndex(COLUMN%8, i)].is_set) {
                 NoteColor(XYToMidiIndex(COLUMN%8, i),120);
             } else {
                 NoteStrobe(XYToMidiIndex(COLUMN%8, i),35);
             }
+        }
+    }
+
+    function PlayColumn()
+    {
+        DrawState();
+        for (var i = 0; i < 8; i++) {
+            PlayButton(COLUMN%8, i);
         }
         COLUMN+=1;
     }
