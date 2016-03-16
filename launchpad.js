@@ -64,14 +64,14 @@ function main()
     var AudioContext = AudioContext || webkitAudioContext; // for ios/safari
     var CONTEXT = new AudioContext();
 
-    LoadSample(SAMPLE0, "assets/A/bubbles.mp3");
-    LoadSample(SAMPLE1, "assets/A/clay.mp3");
-    LoadSample(SAMPLE2, "assets/A/confetti.mp3");
-    LoadSample(SAMPLE3, "assets/A/corona.mp3");
-    LoadSample(SAMPLE4, "assets/A/dotted-spiral.mp3");
-    LoadSample(SAMPLE5, "assets/A/flash-1.mp3");
-    LoadSample(SAMPLE6, "assets/A/flash-2.mp3");
-    LoadSample(SAMPLE7, "assets/A/flash-3.mp3");
+    // LoadSample(SAMPLE0, "assets/A/bubbles.mp3");
+    // LoadSample(SAMPLE1, "assets/A/clay.mp3");
+    // LoadSample(SAMPLE2, "assets/A/confetti.mp3");
+    // LoadSample(SAMPLE3, "assets/A/corona.mp3");
+    // LoadSample(SAMPLE4, "assets/A/dotted-spiral.mp3");
+    // LoadSample(SAMPLE5, "assets/A/flash-1.mp3");
+    // LoadSample(SAMPLE6, "assets/A/flash-2.mp3");
+    // LoadSample(SAMPLE7, "assets/A/flash-3.mp3");
 
     // LoadSample(SAMPLE0, "assets/M1/sound1.wav");
     // LoadSample(SAMPLE1, "assets/M1/sound2.wav");
@@ -81,6 +81,24 @@ function main()
     // LoadSample(SAMPLE5, "assets/M1/sound6.wav");
     // LoadSample(SAMPLE6, "assets/M1/sound7.wav");
     // LoadSample(SAMPLE7, "assets/M1/sound8.wav");
+
+    LoadSample(SAMPLE0, "assets/M2/sound1.wav");
+    LoadSample(SAMPLE1, "assets/M2/sound2.wav");
+    LoadSample(SAMPLE2, "assets/M2/sound3.wav");
+    LoadSample(SAMPLE3, "assets/M2/sound4.wav");
+    LoadSample(SAMPLE4, "assets/M2/sound5.wav");
+    LoadSample(SAMPLE5, "assets/M2/sound6.wav");
+    LoadSample(SAMPLE6, "assets/M2/sound7.wav");
+    LoadSample(SAMPLE7, "assets/M2/sound8.wav");
+
+    // LoadSample(SAMPLE0, "assets/M3/sound1.wav");
+    // LoadSample(SAMPLE1, "assets/M3/sound2.wav");
+    // LoadSample(SAMPLE2, "assets/M3/sound3.wav");
+    // LoadSample(SAMPLE3, "assets/M3/sound4.wav");
+    // LoadSample(SAMPLE4, "assets/M3/sound5.wav");
+    // LoadSample(SAMPLE5, "assets/M3/sound6.wav");
+    // LoadSample(SAMPLE6, "assets/M3/sound7.mp3");
+    // LoadSample(SAMPLE7, "assets/M3/sound8.mp3");
 
     var BUTTONS = [128];
     for (var index = 0; index < 128; index++)
@@ -112,7 +130,7 @@ function main()
             {
                 PlaySample(button.sample, 1.0, 1.0);
                 button.times_played++;
-                console.log(button.times_played);
+                // console.log(button.times_played);
             }
         }
         else
@@ -135,13 +153,13 @@ function main()
         var x = MidiIndexToXY(button_index)[0];
         var y = MidiIndexToXY(button_index)[1];
 
-        console.log("Input: " + button_index + "(" + x + ", " + y + ")");
+        // console.log("Input: " + button_index + "(" + x + ", " + y + ")");
 
         if (x >= 0 && x <= 7 && y >= 0 && y <= 7)
         {
             if (released)
             {
-                console.log("Setting array button");
+                // console.log("Setting array button");
                 if (BUTTONS[button_index].is_set)
                 {
                     BUTTONS[button_index].is_set = false;
@@ -183,25 +201,31 @@ function main()
 
         if (released && button_index == 108)
         {
-            console.log("Resetting all buttons");
+            // console.log("Resetting all buttons");
             for (var index = 0; index < 128; index++)
             {
                 BUTTONS[index].is_set = false;
                 ZeroAllLightsFast();
             }
         }
+
+        if (released && button_index == 19)
+        {
+            console.log("Refreshing");
+            location.reload();
+        }
     }
 
     function ZeroAllLightsFast()
     {
         // Reset-all
-        OUTPUT.send([240, 0, 32, 41, 2,  24, 14, 0, 247]);
+        // OUTPUT.send([240, 0, 32, 41, 2,  24, 14, 0, 247]);
     }
 
     function WriteHelloWorld()
     {
         // Syntax: 240, 0, 32, 41, 2,  24, 20, <Colour> <Loop> <Text> 247
-        OUTPUT.send([240, 0, 32, 41, 2, 4, 20, 124, 1, 5, 72, 101, 108, 108, 111, 32, 2, 119, 111, 114, 108, 100, 33, 247]);
+        // OUTPUT.send([240, 0, 32, 41, 2, 4, 20, 124, 1, 5, 72, 101, 108, 108, 111, 32, 2, 119, 111, 114, 108, 100, 33, 247]);
     }
 
     function SendNoteMessage(data)
@@ -211,7 +235,7 @@ function main()
                     (data[2] >= 0 && data[2] <= 127);
         if (OUTPUT && valid)
         {
-            console.log("Sending " + data);
+            // console.log("Sending " + data);
             OUTPUT.send(data);
         }
     }
@@ -337,6 +361,14 @@ function main()
                 NoteStrobe(XYToMidiIndex(COLUMN%8, i),35);
             }
         }
+
+        // Light up manipulation buttons
+        SendNoteMessage([0xB0, 104, 120]);
+        SendNoteMessage([0xB0, 105, 120]);
+        SendNoteMessage([0xB0, 108, 120]);
+
+        // Light up refresh button
+        // SendNoteMessage([0x90, 19, 120]);
     }
 
     function PlayColumn()
@@ -350,15 +382,12 @@ function main()
         // Turn off buttons that have been played for more than N rounds
         for (var index = 0; index < 128; index++)
         {
-            if (BUTTONS[index].times_played == 2)
+            if (BUTTONS[index].times_played == 1000)
             {
                 BUTTONS[index].times_played = 0;
                 BUTTONS[index].is_set = false;
             }
         }
-
-        // Light up session button
-        // SendNoteMessage([0xB0, 108, 35]);
     }
-    navigator.requestMIDIAccess({sysex: true}).then(OnMidiSuccess, OnMidiFailure);
+    navigator.requestMIDIAccess({sysex: false}).then(OnMidiSuccess, OnMidiFailure);
 }
