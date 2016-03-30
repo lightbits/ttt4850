@@ -73,6 +73,7 @@ function main()
     // LoadSample(SAMPLE6, "assets/A/flash-2.mp3");
     // LoadSample(SAMPLE7, "assets/A/flash-3.mp3");
 
+    // 0.3
     // LoadSample(SAMPLE0, "assets/M1/sound1.wav");
     // LoadSample(SAMPLE1, "assets/M1/sound2.wav");
     // LoadSample(SAMPLE2, "assets/M1/sound3.wav");
@@ -82,6 +83,7 @@ function main()
     // LoadSample(SAMPLE6, "assets/M1/sound7.wav");
     // LoadSample(SAMPLE7, "assets/M1/sound8.wav");
 
+    // 0.5
     LoadSample(SAMPLE0, "assets/M2/sound1.wav");
     LoadSample(SAMPLE1, "assets/M2/sound2.wav");
     LoadSample(SAMPLE2, "assets/M2/sound3.wav");
@@ -128,7 +130,7 @@ function main()
             button = BUTTONS[XYToMidiIndex(x, y)];
             if (button.is_set)
             {
-                PlaySample(button.sample, 1.0, 1.0);
+                PlaySample(button.sample, 0.5, 1.0);
                 button.times_played++;
                 // console.log(button.times_played);
             }
@@ -382,7 +384,7 @@ function main()
         // Turn off buttons that have been played for more than N rounds
         for (var index = 0; index < 128; index++)
         {
-            if (BUTTONS[index].times_played == 1000)
+            if (BUTTONS[index].times_played == 10)
             {
                 BUTTONS[index].times_played = 0;
                 BUTTONS[index].is_set = false;
