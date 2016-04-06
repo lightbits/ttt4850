@@ -52,76 +52,75 @@ function main()
     var COLOR = 32;
     var COLUMN = 0;
 
-    var SAMPLE0 = {buffer: null, gain: 1.0};
-    var SAMPLE1 = {buffer: null, gain: 1.0};
-    var SAMPLE2 = {buffer: null, gain: 1.0};
-    var SAMPLE3 = {buffer: null, gain: 1.0};
-    var SAMPLE4 = {buffer: null, gain: 1.0};
-    var SAMPLE5 = {buffer: null, gain: 1.0};
-    var SAMPLE6 = {buffer: null, gain: 1.0};
-    var SAMPLE7 = {buffer: null, gain: 1.0};
+    var TICKS_SINCE_LAST_TOUCH = 0;
+    var NUM_TICKS_BEFORE_STANDBY = 8*10;
 
     var AudioContext = AudioContext || webkitAudioContext; // for ios/safari
     var CONTEXT = new AudioContext();
 
-    LoadSample(SAMPLE0, "assets/A/bubbles.mp3", 0.05);
-    LoadSample(SAMPLE1, "assets/A/clay.mp3", 0.05);
-    LoadSample(SAMPLE2, "assets/A/confetti.mp3", 0.05);
-    LoadSample(SAMPLE3, "assets/A/corona.mp3", 0.05);
-    LoadSample(SAMPLE4, "assets/A/dotted-spiral.mp3", 0.05);
-    LoadSample(SAMPLE5, "assets/A/flash-1.mp3", 0.05);
-    LoadSample(SAMPLE6, "assets/A/flash-2.mp3", 0.05);
-    LoadSample(SAMPLE7, "assets/A/flash-3.mp3", 0.05);
+    var NUM_SAMPLE_SETS = 3;
+    var SAMPLES = new Array(3);
+    for (var i = 0; i < NUM_SAMPLE_SETS; i++)
+    {
+        SAMPLES[i] = new Array(8);
+        for (j = 0; j < 8; j++)
+            SAMPLES[i][j] = {buffer: null, gain: 1.0};
+    }
 
-    // 0.3
-    // LoadSample(SAMPLE0, "assets/M1/sound1.wav", 0.05);
-    // LoadSample(SAMPLE1, "assets/M1/sound2.wav", 0.05);
-    // LoadSample(SAMPLE2, "assets/M1/sound3.wav", 0.05);
-    // LoadSample(SAMPLE3, "assets/M1/sound4.wav", 0.05);
-    // LoadSample(SAMPLE4, "assets/M1/sound5.wav", 0.05);
-    // LoadSample(SAMPLE5, "assets/M1/sound6.wav", 0.05);
-    // LoadSample(SAMPLE6, "assets/M1/sound7.wav", 0.05);
-    // LoadSample(SAMPLE7, "assets/M1/sound8.wav", 0.05);
+    LoadSample(SAMPLES[0][0], "assets/M1/sound1.wav", 0.05);
+    LoadSample(SAMPLES[0][1], "assets/M1/sound2.wav", 0.05);
+    LoadSample(SAMPLES[0][2], "assets/M1/sound3.wav", 0.05);
+    LoadSample(SAMPLES[0][3], "assets/M1/sound4.wav", 0.05);
+    LoadSample(SAMPLES[0][4], "assets/M1/sound5.wav", 0.05);
+    LoadSample(SAMPLES[0][5], "assets/M1/sound6.wav", 0.05);
+    LoadSample(SAMPLES[0][6], "assets/M1/sound7.wav", 0.05);
+    LoadSample(SAMPLES[0][7], "assets/M1/sound8.wav", 0.05);
 
-    // 0.5
-    // LoadSample(SAMPLE0, "assets/M2/sound1.wav", 0.025);
-    // LoadSample(SAMPLE1, "assets/M2/sound2.wav", 0.05);
-    // LoadSample(SAMPLE2, "assets/M2/sound3.wav", 0.05);
-    // LoadSample(SAMPLE3, "assets/M2/sound4.wav", 0.05);
-    // LoadSample(SAMPLE4, "assets/M2/sound5.wav", 0.05);
-    // LoadSample(SAMPLE5, "assets/M2/sound6.wav", 0.05);
-    // LoadSample(SAMPLE6, "assets/M2/sound7.wav", 0.05);
-    // LoadSample(SAMPLE7, "assets/M2/sound8.wav", 0.05);
+    LoadSample(SAMPLES[1][0], "assets/M2/sound1.wav", 0.025);
+    LoadSample(SAMPLES[1][1], "assets/M2/sound2.wav", 0.05);
+    LoadSample(SAMPLES[1][2], "assets/M2/sound3.wav", 0.05);
+    LoadSample(SAMPLES[1][3], "assets/M2/sound4.wav", 0.05);
+    LoadSample(SAMPLES[1][4], "assets/M2/sound5.wav", 0.05);
+    LoadSample(SAMPLES[1][5], "assets/M2/sound6.wav", 0.05);
+    LoadSample(SAMPLES[1][6], "assets/M2/sound7.wav", 0.05);
+    LoadSample(SAMPLES[1][7], "assets/M2/sound8.wav", 0.05);
 
-    // LoadSample(SAMPLE0, "assets/M3/sound1.wav", 0.05);
-    // LoadSample(SAMPLE1, "assets/M3/sound2.wav", 0.05);
-    // LoadSample(SAMPLE2, "assets/M3/sound3.wav", 0.05);
-    // LoadSample(SAMPLE3, "assets/M3/sound4.wav", 0.05);
-    // LoadSample(SAMPLE4, "assets/M3/sound5.wav", 0.05);
-    // LoadSample(SAMPLE5, "assets/M3/sound6.wav", 0.05);
-    // LoadSample(SAMPLE6, "assets/M3/sound7.mp3", 0.05);
-    // LoadSample(SAMPLE7, "assets/M3/sound8.mp3", 0.05);
+    LoadSample(SAMPLES[2][0], "assets/M3/sound1.wav", 0.05);
+    LoadSample(SAMPLES[2][1], "assets/M3/sound2.wav", 0.05);
+    LoadSample(SAMPLES[2][2], "assets/M3/sound3.wav", 0.05);
+    LoadSample(SAMPLES[2][3], "assets/M3/sound4.wav", 0.05);
+    LoadSample(SAMPLES[2][4], "assets/M3/sound5.wav", 0.05);
+    LoadSample(SAMPLES[2][5], "assets/M3/sound6.wav", 0.05);
+    LoadSample(SAMPLES[2][6], "assets/M3/sound7.mp3", 0.05);
+    LoadSample(SAMPLES[2][7], "assets/M3/sound8.mp3", 0.05);
+
+    var SELECTED_SAMPLE_SET = 0;
 
     var BUTTONS = [128];
     for (var index = 0; index < 128; index++)
     {
         BUTTONS.push({sample: null, is_set: false, is_down: false, times_played: 0});
     }
-    for (var x = 0; x < 8; x++)
-    {
-        BUTTONS[XYToMidiIndex(x, 0)] = {sample: SAMPLE0, is_set: false, is_down: false, times_played: 0};
-        BUTTONS[XYToMidiIndex(x, 1)] = {sample: SAMPLE1, is_set: false, is_down: false, times_played: 0};
-        BUTTONS[XYToMidiIndex(x, 2)] = {sample: SAMPLE2, is_set: false, is_down: false, times_played: 0};
-        BUTTONS[XYToMidiIndex(x, 3)] = {sample: SAMPLE3, is_set: false, is_down: false, times_played: 0};
-        BUTTONS[XYToMidiIndex(x, 4)] = {sample: SAMPLE4, is_set: false, is_down: false, times_played: 0};
-        BUTTONS[XYToMidiIndex(x, 5)] = {sample: SAMPLE5, is_set: false, is_down: false, times_played: 0};
-        BUTTONS[XYToMidiIndex(x, 6)] = {sample: SAMPLE6, is_set: false, is_down: false, times_played: 0};
-        BUTTONS[XYToMidiIndex(x, 7)] = {sample: SAMPLE7, is_set: false, is_down: false, times_played: 0};
-    }
+
+    AssignSampleSetToButtons();
 
     var SPEED_INDEX = 2;
     var SPEEDS = [ 200, 250, 300, 350, 400, 450, 500 ];
     var LOOP = StartMusicLoop(SPEEDS[SPEED_INDEX]);
+
+    function AssignSampleSetToButtons()
+    {
+        for (var x = 0; x < 8; x++)
+        for (var y = 0; y < 8; y++)
+        {
+            BUTTONS[XYToMidiIndex(x, y)] = {
+                sample: SAMPLES[SELECTED_SAMPLE_SET][y],
+                is_set: false,
+                is_down: false,
+                times_played: 0
+            };
+        }
+    }
 
     function PlayButton(x, y)
     {
@@ -179,6 +178,8 @@ function main()
                 BUTTONS[button_index].is_down = true;
                 NoteColor(button_index, 119);
             }
+
+            TICKS_SINCE_LAST_TOUCH = 0;
         }
 
         if (released && button_index == 105)
@@ -203,12 +204,12 @@ function main()
 
         if (released && button_index == 108)
         {
-            // console.log("Resetting all buttons");
             for (var index = 0; index < 128; index++)
             {
                 BUTTONS[index].is_set = false;
-                ZeroAllLightsFast();
             }
+            ZeroAllLightsFast();
+            TICKS_SINCE_LAST_TOUCH = 0;
         }
 
         if (released && button_index == 19)
@@ -365,13 +366,10 @@ function main()
             }
         }
 
-        // Light up manipulation buttons
-        SendNoteMessage([0xB0, 104, 120]);
-        SendNoteMessage([0xB0, 105, 120]);
-        SendNoteMessage([0xB0, 108, 120]);
-
-        // Light up refresh button
-        // SendNoteMessage([0x90, 19, 120]);
+        // Light up control buttons
+        SendNoteMessage([0xB0, 104, 120]); // speed up
+        SendNoteMessage([0xB0, 105, 120]); // speed down
+        SendNoteMessage([0xB0, 108, 120]); // reset
     }
 
     function PlayColumn()
@@ -382,13 +380,56 @@ function main()
         }
         COLUMN+=1;
 
-        // Turn off buttons that have been played for more than N rounds
-        for (var index = 0; index < 128; index++)
+        TICKS_SINCE_LAST_TOUCH+=1;
+
+        if (TICKS_SINCE_LAST_TOUCH >= NUM_TICKS_BEFORE_STANDBY)
         {
-            if (BUTTONS[index].times_played == 100)
+            if (TICKS_SINCE_LAST_TOUCH == NUM_TICKS_BEFORE_STANDBY)
             {
-                BUTTONS[index].times_played = 0;
-                BUTTONS[index].is_set = false;
+                var pattern = [
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
+                    [1, 0, 1, 0, 1, 0, 1, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0]
+                ];
+
+                SELECTED_SAMPLE_SET += 1;
+                SELECTED_SAMPLE_SET = SELECTED_SAMPLE_SET % 3;
+                AssignSampleSetToButtons();
+
+                for (var y = 0; y < 8; y++)
+                for (var x = 0; x < 8; x++)
+                {
+                    button_index = XYToMidiIndex(x, y);
+                    if (pattern[y][x] == 1)
+                    {
+                        BUTTONS[button_index].is_set = true;
+                        BUTTONS[button_index].times_played = 0;
+                        NoteColor(button_index, 9);
+                    }
+                    else
+                    {
+                        BUTTONS[button_index].is_set = false;
+                        NoteColor(button_index, 0);
+                    }
+                }
+                SPEED_INDEX = 0;
+            }
+        }
+        else
+        {
+            // Turn off buttons that have been played for more than N rounds
+            for (var index = 0; index < 128; index++)
+            {
+                if (BUTTONS[index].times_played >= 100)
+                {
+                    BUTTONS[index].times_played = 0;
+                    BUTTONS[index].is_set = false;
+                }
             }
         }
     }
