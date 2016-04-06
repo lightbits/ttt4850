@@ -212,11 +212,11 @@ function main()
             TICKS_SINCE_LAST_TOUCH = 0;
         }
 
-        if (released && button_index == 19)
-        {
-            console.log("Refreshing");
-            location.reload();
-        }
+        // if (released && button_index == 19)
+        // {
+        //     console.log("Refreshing");
+        //     location.reload();
+        // }
     }
 
     function ZeroAllLightsFast()
