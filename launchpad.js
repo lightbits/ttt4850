@@ -52,55 +52,55 @@ function main()
     var COLOR = 32;
     var COLUMN = 0;
 
-    var SAMPLE0 = {buffer: null};
-    var SAMPLE1 = {buffer: null};
-    var SAMPLE2 = {buffer: null};
-    var SAMPLE3 = {buffer: null};
-    var SAMPLE4 = {buffer: null};
-    var SAMPLE5 = {buffer: null};
-    var SAMPLE6 = {buffer: null};
-    var SAMPLE7 = {buffer: null};
+    var SAMPLE0 = {buffer: null, gain: 1.0};
+    var SAMPLE1 = {buffer: null, gain: 1.0};
+    var SAMPLE2 = {buffer: null, gain: 1.0};
+    var SAMPLE3 = {buffer: null, gain: 1.0};
+    var SAMPLE4 = {buffer: null, gain: 1.0};
+    var SAMPLE5 = {buffer: null, gain: 1.0};
+    var SAMPLE6 = {buffer: null, gain: 1.0};
+    var SAMPLE7 = {buffer: null, gain: 1.0};
 
     var AudioContext = AudioContext || webkitAudioContext; // for ios/safari
     var CONTEXT = new AudioContext();
 
-    // LoadSample(SAMPLE0, "assets/A/bubbles.mp3");
-    // LoadSample(SAMPLE1, "assets/A/clay.mp3");
-    // LoadSample(SAMPLE2, "assets/A/confetti.mp3");
-    // LoadSample(SAMPLE3, "assets/A/corona.mp3");
-    // LoadSample(SAMPLE4, "assets/A/dotted-spiral.mp3");
-    // LoadSample(SAMPLE5, "assets/A/flash-1.mp3");
-    // LoadSample(SAMPLE6, "assets/A/flash-2.mp3");
-    // LoadSample(SAMPLE7, "assets/A/flash-3.mp3");
+    LoadSample(SAMPLE0, "assets/A/bubbles.mp3", 0.05);
+    LoadSample(SAMPLE1, "assets/A/clay.mp3", 0.05);
+    LoadSample(SAMPLE2, "assets/A/confetti.mp3", 0.05);
+    LoadSample(SAMPLE3, "assets/A/corona.mp3", 0.05);
+    LoadSample(SAMPLE4, "assets/A/dotted-spiral.mp3", 0.05);
+    LoadSample(SAMPLE5, "assets/A/flash-1.mp3", 0.05);
+    LoadSample(SAMPLE6, "assets/A/flash-2.mp3", 0.05);
+    LoadSample(SAMPLE7, "assets/A/flash-3.mp3", 0.05);
 
     // 0.3
-    // LoadSample(SAMPLE0, "assets/M1/sound1.wav");
-    // LoadSample(SAMPLE1, "assets/M1/sound2.wav");
-    // LoadSample(SAMPLE2, "assets/M1/sound3.wav");
-    // LoadSample(SAMPLE3, "assets/M1/sound4.wav");
-    // LoadSample(SAMPLE4, "assets/M1/sound5.wav");
-    // LoadSample(SAMPLE5, "assets/M1/sound6.wav");
-    // LoadSample(SAMPLE6, "assets/M1/sound7.wav");
-    // LoadSample(SAMPLE7, "assets/M1/sound8.wav");
+    // LoadSample(SAMPLE0, "assets/M1/sound1.wav", 0.05);
+    // LoadSample(SAMPLE1, "assets/M1/sound2.wav", 0.05);
+    // LoadSample(SAMPLE2, "assets/M1/sound3.wav", 0.05);
+    // LoadSample(SAMPLE3, "assets/M1/sound4.wav", 0.05);
+    // LoadSample(SAMPLE4, "assets/M1/sound5.wav", 0.05);
+    // LoadSample(SAMPLE5, "assets/M1/sound6.wav", 0.05);
+    // LoadSample(SAMPLE6, "assets/M1/sound7.wav", 0.05);
+    // LoadSample(SAMPLE7, "assets/M1/sound8.wav", 0.05);
 
     // 0.5
-    LoadSample(SAMPLE0, "assets/M2/sound1.wav");
-    LoadSample(SAMPLE1, "assets/M2/sound2.wav");
-    LoadSample(SAMPLE2, "assets/M2/sound3.wav");
-    LoadSample(SAMPLE3, "assets/M2/sound4.wav");
-    LoadSample(SAMPLE4, "assets/M2/sound5.wav");
-    LoadSample(SAMPLE5, "assets/M2/sound6.wav");
-    LoadSample(SAMPLE6, "assets/M2/sound7.wav");
-    LoadSample(SAMPLE7, "assets/M2/sound8.wav");
+    // LoadSample(SAMPLE0, "assets/M2/sound1.wav", 0.025);
+    // LoadSample(SAMPLE1, "assets/M2/sound2.wav", 0.05);
+    // LoadSample(SAMPLE2, "assets/M2/sound3.wav", 0.05);
+    // LoadSample(SAMPLE3, "assets/M2/sound4.wav", 0.05);
+    // LoadSample(SAMPLE4, "assets/M2/sound5.wav", 0.05);
+    // LoadSample(SAMPLE5, "assets/M2/sound6.wav", 0.05);
+    // LoadSample(SAMPLE6, "assets/M2/sound7.wav", 0.05);
+    // LoadSample(SAMPLE7, "assets/M2/sound8.wav", 0.05);
 
-    // LoadSample(SAMPLE0, "assets/M3/sound1.wav");
-    // LoadSample(SAMPLE1, "assets/M3/sound2.wav");
-    // LoadSample(SAMPLE2, "assets/M3/sound3.wav");
-    // LoadSample(SAMPLE3, "assets/M3/sound4.wav");
-    // LoadSample(SAMPLE4, "assets/M3/sound5.wav");
-    // LoadSample(SAMPLE5, "assets/M3/sound6.wav");
-    // LoadSample(SAMPLE6, "assets/M3/sound7.mp3");
-    // LoadSample(SAMPLE7, "assets/M3/sound8.mp3");
+    // LoadSample(SAMPLE0, "assets/M3/sound1.wav", 0.05);
+    // LoadSample(SAMPLE1, "assets/M3/sound2.wav", 0.05);
+    // LoadSample(SAMPLE2, "assets/M3/sound3.wav", 0.05);
+    // LoadSample(SAMPLE3, "assets/M3/sound4.wav", 0.05);
+    // LoadSample(SAMPLE4, "assets/M3/sound5.wav", 0.05);
+    // LoadSample(SAMPLE5, "assets/M3/sound6.wav", 0.05);
+    // LoadSample(SAMPLE6, "assets/M3/sound7.mp3", 0.05);
+    // LoadSample(SAMPLE7, "assets/M3/sound8.mp3", 0.05);
 
     var BUTTONS = [128];
     for (var index = 0; index < 128; index++)
@@ -130,7 +130,7 @@ function main()
             button = BUTTONS[XYToMidiIndex(x, y)];
             if (button.is_set)
             {
-                PlaySample(button.sample, 0.5, 1.0);
+                PlaySample(button.sample, button.sample.gain, 1.0);
                 button.times_played++;
                 // console.log(button.times_played);
             }
@@ -301,7 +301,7 @@ function main()
         sample.s.stop();
     }
 
-    function LoadSample(sample, url)
+    function LoadSample(sample, url, gain)
     {
         console.log(CONTEXT);
         var request = new XMLHttpRequest();
@@ -310,6 +310,7 @@ function main()
         request.onload = function() {
             CONTEXT.decodeAudioData(request.response, function(buffer) {
                 sample.buffer = buffer;
+                sample.gain = gain;
             });
         }
         request.send();
@@ -384,7 +385,7 @@ function main()
         // Turn off buttons that have been played for more than N rounds
         for (var index = 0; index < 128; index++)
         {
-            if (BUTTONS[index].times_played == 10)
+            if (BUTTONS[index].times_played == 100)
             {
                 BUTTONS[index].times_played = 0;
                 BUTTONS[index].is_set = false;
