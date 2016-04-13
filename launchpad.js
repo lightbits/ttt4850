@@ -53,7 +53,7 @@ function main()
     var COLUMN = 0;
 
     var TICKS_SINCE_LAST_TOUCH = 0;
-    var NUM_TICKS_BEFORE_STANDBY = 8*10;
+    var NUM_TICKS_BEFORE_STANDBY = 8*1000;
 
     var AudioContext = AudioContext || webkitAudioContext; // for ios/safari
     var CONTEXT = new AudioContext();
@@ -73,7 +73,7 @@ function main()
     LoadSample(SAMPLES[0][3], "assets/M1/sound4.wav", 0.05);
     LoadSample(SAMPLES[0][4], "assets/M1/sound5.wav", 0.05);
     LoadSample(SAMPLES[0][5], "assets/M1/sound6.wav", 0.05);
-    LoadSample(SAMPLES[0][6], "assets/M1/sound7.wav", 0.05);
+    LoadSample(SAMPLES[0][6], "assets/M1/sound7.wav", 0.01);
     LoadSample(SAMPLES[0][7], "assets/M1/sound8.wav", 0.05);
 
     LoadSample(SAMPLES[1][0], "assets/M2/sound1.wav", 0.025);
@@ -113,11 +113,12 @@ function main()
         for (var x = 0; x < 8; x++)
         for (var y = 0; y < 8; y++)
         {
+            var prev = BUTTONS[XYToMidiIndex(x, y)]
             BUTTONS[XYToMidiIndex(x, y)] = {
                 sample: SAMPLES[SELECTED_SAMPLE_SET][y],
-                is_set: false,
+                is_set: prev.is_set,
                 is_down: false,
-                times_played: 0
+                times_played: prev.times_played
             };
         }
     }
@@ -210,6 +211,45 @@ function main()
             }
             ZeroAllLightsFast();
             TICKS_SINCE_LAST_TOUCH = 0;
+        }
+
+        // Enable set 1
+        if (button_index == 109)
+        {
+            if (released)
+            {
+                SELECTED_SAMPLE_SET = 0;
+                AssignSampleSetToButtons();
+            }
+            SendNoteMessage([0xB0, 109, 12]);
+            SendNoteMessage([0xB0, 110, 120]);
+            SendNoteMessage([0xB0, 111, 120]);
+        }
+
+        // Enable set 2
+        if (button_index == 110)
+        {
+            if (released)
+            {
+                SELECTED_SAMPLE_SET = 1;
+                AssignSampleSetToButtons();
+            }
+            SendNoteMessage([0xB0, 109, 120]);
+            SendNoteMessage([0xB0, 110, 12]);
+            SendNoteMessage([0xB0, 111, 120]);
+        }
+
+        // Enable set 3
+        if (button_index == 111)
+        {
+            if (released)
+            {
+                SELECTED_SAMPLE_SET = 2;
+                AssignSampleSetToButtons();
+            }
+            SendNoteMessage([0xB0, 109, 120]);
+            SendNoteMessage([0xB0, 110, 120]);
+            SendNoteMessage([0xB0, 111, 12]);
         }
 
         // if (released && button_index == 19)
@@ -370,6 +410,22 @@ function main()
         SendNoteMessage([0xB0, 104, 120]); // speed up
         SendNoteMessage([0xB0, 105, 120]); // speed down
         SendNoteMessage([0xB0, 108, 120]); // reset
+
+        // set 1
+        if (SELECTED_SAMPLE_SET == 0)
+            SendNoteMessage([0xB0, 109, 12]);
+        else
+            SendNoteMessage([0xB0, 109, 120]);
+
+        if (SELECTED_SAMPLE_SET == 1)
+            SendNoteMessage([0xB0, 110, 12]);
+        else
+            SendNoteMessage([0xB0, 110, 120]);
+
+        if (SELECTED_SAMPLE_SET == 2)
+            SendNoteMessage([0xB0, 111, 12]);
+        else
+            SendNoteMessage([0xB0, 111, 120]);
     }
 
     function PlayColumn()
@@ -393,13 +449,13 @@ function main()
                     [0, 0, 0, 0, 0, 0, 0, 0],
                     [0, 0, 0, 0, 0, 0, 0, 0],
                     [0, 0, 0, 0, 0, 0, 0, 0],
-                    [1, 0, 1, 0, 1, 0, 1, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 0],
                     [0, 0, 0, 0, 0, 0, 0, 0]
                 ];
 
-                SELECTED_SAMPLE_SET += 1;
-                SELECTED_SAMPLE_SET = SELECTED_SAMPLE_SET % 3;
-                AssignSampleSetToButtons();
+                // SELECTED_SAMPLE_SET += 1;
+                // SELECTED_SAMPLE_SET = SELECTED_SAMPLE_SET % 3;
+                // AssignSampleSetToButtons();
 
                 for (var y = 0; y < 8; y++)
                 for (var x = 0; x < 8; x++)
